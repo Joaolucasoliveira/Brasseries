@@ -15,7 +15,7 @@
 <main class="container-fluid">
   <div class="row justify-content-center">
   <form class="form-group">
-        <input [(ngModel)]="filter" class="form-control" id="txtRecherche" type="text" placeholder="Tapez pour chercher..." />
+        <input [(ngModel)]="filter" class="form-control" id="txtRecherche" name="txtRecherche" />
         <span>{{filter}}</span>
         <small class="form-text text-muted">N'ayez pas peur, vous allez trouver ce que vous cherchez...</small>
   </form>
@@ -33,7 +33,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let brasserie of brasseries">
+    <tr *ngFor="let brasserie of filteredBrasseries">
       <th scope="row">{{brasserie.id}}</th>
       <td>{{brasserie.name}}</td>
       <td>{{brasserie.street}}</td>
