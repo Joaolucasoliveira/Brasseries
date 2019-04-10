@@ -1,5 +1,6 @@
 import { Component, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { BrasserieDataService } from './brasserie-data.service';
+import { Subject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { IBrasserie } from './IBrasserie';
 
@@ -8,10 +9,20 @@ import { IBrasserie } from './IBrasserie';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit, OnChanges {
+export class AppComponent implements OnInit {
   brasseries: IBrasserie[] = [];
   filteredBrasseries: IBrasserie[];
-  filter: string;
+  _filter: string;
+  searchTerm$: Subject<string>;
+
+  get filter(): string {
+    return this._filter;
+  }
+
+  set filter(value: string) {
+    this._filter = value;
+    this.filteredBrasseries = this.brasseries.filter((brasserie) => brasserie.name.toLocaleLowerCase().startsWith(this._filter.toLocaleLowerCase()));
+  }
 
   constructor(private brasserieDataService: BrasserieDataService) {
 
@@ -23,12 +34,5 @@ export class AppComponent implements OnInit, OnChanges {
         this.brasseries = brasseries;
         this.filteredBrasseries = this.brasseries;
       });
-  }
-
-  ngOnChanges(simpleChanges: SimpleChanges) {
-    console.log("detected changes");
-    if (simpleChanges.filter.currentValue != simpleChanges.filter.previousValue) {
-      this.filteredBrasseries = this.brasseries.filter((brasserie) => brasserie.name.startsWith(simpleChanges.filter.currentValue));
-    }
   }
 }
